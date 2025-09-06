@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Datos Recibidos</h2>
+    <p>Nombre: {{ nombre }}</p>
+    <p>Correo: {{ correo }}</p>
+    <a href="{{ url_for('index') }}">Volver al inicio</a>
+{% endblock %}

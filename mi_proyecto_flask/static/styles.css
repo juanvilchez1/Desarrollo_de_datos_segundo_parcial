@@ -1,0 +1,98 @@
+/* Fondo general y tipografía */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #0d0d0d; /* negro profundo */
+    color: #e0e0ff; /* texto claro con tono violeta */
+}
+
+/* Encabezado */
+header {
+    background: linear-gradient(to right, #2c003e, #4b0082); /* degradado morado */
+    color: #ffffff;
+    padding: 1.5em;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(128, 0, 128, 0.5);
+}
+
+/* Pie de página */
+footer {
+    background-color: #1a1a1a;
+    color: #999;
+    padding: 1em;
+    text-align: center;
+    font-size: 0.9em;
+}
+
+/* Contenido principal */
+main {
+    padding: 2em;
+    max-width: 800px;
+    margin: auto;
+    background-color: #1c1c1c;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(75, 0, 130, 0.3);
+}
+
+/* Enlaces */
+a {
+    color: #bb86fc;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    color: #e0b3ff;
+    text-decoration: underline;
+}
+
+/* Formularios */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+    margin-top: 2em;
+}
+
+form input {
+    padding: 0.7em;
+    width: 80%;
+    max-width: 400px;
+    border: none;
+    border-radius: 5px;
+    background-color: #2a2a2a;
+    color: #fff;
+    font-size: 1em;
+}
+
+form input:focus {
+    outline: none;
+    box-shadow: 0 0 5px #bb86fc;
+}
+
+/* Botón */
+button {
+    padding: 0.7em 1.5em;
+    background-color: #6a0dad;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #8a2be2;
+}
+
+/* Títulos */
+h2 {
+    color: #bb86fc;
+    margin-bottom: 1em;
+}
+body {
+    border: 5px solid red;
+}

@@ -2,29 +2,13 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Mi Proyecto Flask{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Mi Proyecto Flask</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <h1>🌟 Mi Proyecto Flask 🌟</h1>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('index') }}">Inicio</a></li>
-                <li><a href="{{ url_for('about') }}">Acerca de</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <!-- Contenido dinámico -->
-    <main>
-        {% block content %}{% endblock %}
-    </main>
-
-    <footer>
-        <p>© 2025 - Mi Proyecto Flask</p>
-    </footer>
+    <header><h1>Mi Proyecto Flask</h1></header>
+    <main>{% block content %}{% endblock %}</main>
+    <footer><p>&copy; 2025 Juan</p></footer>
 </body>
 </html>
+

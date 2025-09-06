@@ -1,5 +1,19 @@
+# Entornos virtuales y cachés
 venv/
+.venv/
 __pycache__/
-*.pyc
+*.py[cod]
+.mypy_cache/
+.pytest_cache/
 
+# Configuración local
+.vscode/
+.idea/
+
+# Archivos sensibles o temporales
+.env
+*.log
+*.sqlite3
+*.db
+.DS_Store
 

@@ -1,8 +1,6 @@
-{% extends "base.html" %}
-
-{% block title %}Inicio{% endblock %}
-
+{% extends 'base.html' %}
 {% block content %}
-    <h2>Bienvenido a mi proyecto Flask</h2>
-    <p>Este es el inicio de la app con header y nav listos 🚀.</p>
+    <h2>Bienvenido</h2>
+    <a href="{{ url_for('formulario') }}">Ir al formulario</a>
 {% endblock %}
+
