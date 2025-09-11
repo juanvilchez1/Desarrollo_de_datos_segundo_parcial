@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 import json, csv, os
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import declarative_base, sessionmaker
+from conexion.conexion import obtener_conexion # ← nueva importación
 
 app = Flask(__name__)
 
@@ -39,18 +40,12 @@ def resultado():
 
     # Guardar en JSON
     datos_json = {'nombre': nombre, 'correo': correo}
-
-    # Leer datos existentes
     try:
         with open('datos/datos.json', 'r') as f:
             datos_existentes = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         datos_existentes = []
-
-    # Agregar nuevo dato
     datos_existentes.append(datos_json)
-
-    # Guardar todo como lista
     with open('datos/datos.json', 'w') as f:
         json.dump(datos_existentes, f, indent=4)
 
@@ -64,7 +59,18 @@ def resultado():
     session.add(nuevo_usuario)
     session.commit()
 
-    # Renderizar resultado
+    # Guardar en MySQL
+    try:
+        conexion = obtener_conexion()
+        cursor = conexion.cursor()
+        cursor.execute("INSERT INTO usuarios (nombre, correo) VALUES (%s, %s)", (nombre, correo))
+        conexion.commit()
+        cursor.close()
+        conexion.close()
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        print(f"Error al guardar en MySQL: {e}")
     return render_template('resultado.html', nombre=nombre, correo=correo)
 
 @app.route('/ver_csv')
@@ -80,11 +86,23 @@ def ver_sqlite():
     datos = [{'nombre': u.nombre, 'correo': u.correo} for u in usuarios]
     return {'usuarios': datos}
 
+@app.route('/ver_mysql')
+def ver_mysql():
+    try:
+        conexion = obtener_conexion()
+        cursor = conexion.cursor()
+        cursor.execute("SELECT nombre, correo FROM usuarios")
+        resultados = cursor.fetchall()
+        datos = [{'nombre': nombre, 'correo': correo} for nombre, correo in resultados]
+        cursor.close()
+        conexion.close()
+        return {'usuarios': datos}
+    except Exception as e:
+        return {'error': str(e)}
+
 @app.route('/about')
 def about():
     return render_template('about.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-    
