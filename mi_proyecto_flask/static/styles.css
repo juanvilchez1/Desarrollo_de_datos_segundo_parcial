@@ -1,98 +1,121 @@
-/* Fondo general y tipografía */
 body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f0f0f5;
+    color: #333;
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #0d0d0d; /* negro profundo */
-    color: #e0e0ff; /* texto claro con tono violeta */
 }
 
-/* Encabezado */
-header {
-    background: linear-gradient(to right, #2c003e, #4b0082); /* degradado morado */
-    color: #ffffff;
-    padding: 1.5em;
+header, footer {
+    background-color: #6A0DAD;
+    color: white;
     text-align: center;
-    box-shadow: 0 2px 10px rgba(128, 0, 128, 0.5);
+    padding: 1rem;
 }
 
-/* Pie de página */
-footer {
-    background-color: #1a1a1a;
-    color: #999;
-    padding: 1em;
-    text-align: center;
-    font-size: 0.9em;
-}
-
-/* Contenido principal */
-main {
-    padding: 2em;
-    max-width: 800px;
-    margin: auto;
-    background-color: #1c1c1c;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(75, 0, 130, 0.3);
-}
-
-/* Enlaces */
-a {
-    color: #bb86fc;
+nav a {
+    color: white;
+    margin: 0 10px;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 600;
 }
 
-a:hover {
-    color: #e0b3ff;
-    text-decoration: underline;
+nav a:hover {
+    color: #B19CD9;
 }
 
-/* Formularios */
+main {
+    padding: 2rem;
+}
+
+h1, h2 {
+    color: #4B0082;
+    text-align: center;
+}
+
 form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1em;
-    margin-top: 2em;
-}
-
-form input {
-    padding: 0.7em;
-    width: 80%;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
     max-width: 400px;
-    border: none;
+    margin: auto;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 600;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    background-color: #2a2a2a;
-    color: #fff;
-    font-size: 1em;
 }
 
-form input:focus {
-    outline: none;
-    box-shadow: 0 0 5px #bb86fc;
-}
-
-/* Botón */
 button {
-    padding: 0.7em 1.5em;
-    background-color: #6a0dad;
-    color: #fff;
+    background-color: #6A0DAD;
+    color: white;
+    padding: 10px 20px;
+    margin-top: 1rem;
     border: none;
     border-radius: 5px;
-    font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    font-weight: 600;
 }
 
 button:hover {
-    background-color: #8a2be2;
+    background-color: #4B0082;
 }
 
-/* Títulos */
-h2 {
-    color: #bb86fc;
-    margin-bottom: 1em;
+p {
+    text-align: center;
+    margin-top: 1rem;
 }
-body {
-    border: 5px solid red;
+
+input::placeholder {
+    font-family: 'Font Awesome 6 Free', sans-serif;
+    font-weight: 400;
 }
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    outline: none;
+    border-color: #6A0DAD; 
+    box-shadow: 0 0 5px rgba(106, 13, 173, 0.3); 
+}
+
+.alert {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.dashboard-actions {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.btn-logout {
+    display: inline-block;
+    background-color: #6A0DAD;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.btn-logout:hover {
+    background-color: #4B0082;
+}
+
+

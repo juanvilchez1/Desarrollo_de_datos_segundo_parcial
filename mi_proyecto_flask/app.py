@@ -1,105 +1,99 @@
 from flask import Flask, render_template, request, redirect, url_for
-import json, csv, os
-from sqlalchemy import create_engine, Column, Integer, String
-from sqlalchemy.orm import declarative_base, sessionmaker
-from conexion.conexion import obtener_conexion # ← nueva importación
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
+from conexion.conexion import obtener_conexion
+from models import Usuario
 
 app = Flask(__name__)
+app.secret_key = 'clave_secreta_segura'
 
-# SQLite setup
-Base = declarative_base()
-engine = create_engine('sqlite:///database/usuarios.db')
-Session = sessionmaker(bind=engine)
-session = Session()
+# Configuración Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
 
-class Usuario(Base):
-    __tablename__ = 'usuarios'
-    id = Column(Integer, primary_key=True)
-    nombre = Column(String)
-    correo = Column(String)
+# Cargar usuario desde MySQL
+@login_manager.user_loader
+def load_user(user_id):
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT id, nombre, correo, password FROM usuarios WHERE id = %s", (user_id,))
+    resultado = cursor.fetchone()
+    cursor.close()
+    conexion.close()
+    if resultado:
+        return Usuario(*resultado)
+    return None
 
-Base.metadata.create_all(engine)
+# ---------------- RUTAS ---------------- #
 
-# Rutas
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/formulario')
-def formulario():
-    return render_template('formulario.html')
+# Registro de usuarios
+@app.route('/registro', methods=['GET', 'POST'])
+def registro():
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        correo = request.form['correo']
+        password_plano = request.form['password']
 
-@app.route('/resultado', methods=['POST'])
-def resultado():
-    nombre = request.form['nombre']
-    correo = request.form['correo']
+        # Encriptar contraseña
+        password_hash = generate_password_hash(password_plano)
 
-    # Guardar en TXT
-    with open('datos/datos.txt', 'a') as f:
-        f.write(f'{nombre},{correo}\n')
+        try:
+            conexion = obtener_conexion()
+            cursor = conexion.cursor()
+            cursor.execute("""
+                INSERT INTO usuarios (nombre, correo, password)
+                VALUES (%s, %s, %s)
+            """, (nombre, correo, password_hash))
+            conexion.commit()
+            cursor.close()
+            conexion.close()
+            return redirect(url_for('login'))
+        except Exception as e:
+            print(f"Error en registro: {e}")
+            return render_template('registro.html', mensaje="Error: el correo ya está registrado o hubo un problema.")
+    return render_template('registro.html')
 
-    # Guardar en JSON
-    datos_json = {'nombre': nombre, 'correo': correo}
-    try:
-        with open('datos/datos.json', 'r') as f:
-            datos_existentes = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        datos_existentes = []
-    datos_existentes.append(datos_json)
-    with open('datos/datos.json', 'w') as f:
-        json.dump(datos_existentes, f, indent=4)
+# Login de usuarios
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        correo = request.form['correo']
+        password = request.form['password']
 
-    # Guardar en CSV
-    with open('datos/datos.csv', 'a', newline='') as f:
-        writer = csv.writer(f)
-        writer.writerow([nombre, correo])
-
-    # Guardar en SQLite
-    nuevo_usuario = Usuario(nombre=nombre, correo=correo)
-    session.add(nuevo_usuario)
-    session.commit()
-
-    # Guardar en MySQL
-    try:
         conexion = obtener_conexion()
         cursor = conexion.cursor()
-        cursor.execute("INSERT INTO usuarios (nombre, correo) VALUES (%s, %s)", (nombre, correo))
-        conexion.commit()
+        cursor.execute("SELECT id, nombre, correo, password FROM usuarios WHERE correo = %s", (correo,))
+        resultado = cursor.fetchone()
         cursor.close()
         conexion.close()
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        print(f"Error al guardar en MySQL: {e}")
-    return render_template('resultado.html', nombre=nombre, correo=correo)
 
-@app.route('/ver_csv')
-def ver_csv():
-    with open('datos/datos.csv') as f:
-        reader = csv.reader(f)
-        datos = [{'nombre': row[0], 'correo': row[1]} for row in reader]
-    return {'usuarios': datos}
+        if resultado and check_password_hash(resultado[3], password):
+            usuario = Usuario(*resultado)
+            login_user(usuario)
+            return redirect(url_for('dashboard'))
+        else:
+            return render_template('login.html', mensaje="Correo o contraseña incorrectos.")
+    return render_template('login.html')
 
-@app.route('/ver_sqlite')
-def ver_sqlite():
-    usuarios = session.query(Usuario).all()
-    datos = [{'nombre': u.nombre, 'correo': u.correo} for u in usuarios]
-    return {'usuarios': datos}
+# Dashboard protegido
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    return render_template('dashboard.html', nombre=current_user.nombre)
 
-@app.route('/ver_mysql')
-def ver_mysql():
-    try:
-        conexion = obtener_conexion()
-        cursor = conexion.cursor()
-        cursor.execute("SELECT nombre, correo FROM usuarios")
-        resultados = cursor.fetchall()
-        datos = [{'nombre': nombre, 'correo': correo} for nombre, correo in resultados]
-        cursor.close()
-        conexion.close()
-        return {'usuarios': datos}
-    except Exception as e:
-        return {'error': str(e)}
+# Logout
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
 
+# Página "Acerca de"
 @app.route('/about')
 def about():
     return render_template('about.html')

@@ -2,13 +2,28 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Mi Proyecto Flask</title>
+    <title>{% block title %}Mi Proyecto Flask{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <header><h1>Mi Proyecto Flask</h1></header>
-    <main>{% block content %}{% endblock %}</main>
-    <footer><p>&copy; 2025 Juan</p></footer>
+    <header>
+        <h1>Mi Proyecto Flask</h1>
+        <nav>
+            <a href="{{ url_for('index') }}"><i class="fas fa-home"></i> Inicio</a> |
+            <a href="{{ url_for('registro') }}"><i class="fas fa-user-edit"></i> Registro</a> |
+            <a href="{{ url_for('about') }}"><i class="fas fa-info-circle"></i> Acerca de</a>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Juan</p>
+    </footer>
 </body>
 </html>
 

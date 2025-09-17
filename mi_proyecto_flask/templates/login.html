@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Iniciar Sesión{% endblock %}
+{% block content %}
+<h2><i class="fas fa-sign-in-alt"></i> Acceso de Usuario</h2>
+
+{% if mensaje %}
+<div class="alert">{{ mensaje }}</div>
+{% endif %}
+
+<form action="{{ url_for('login') }}" method="post">
+    <label for="correo"><i class="fas fa-envelope"></i> Correo:</label>
+    <input type="email" name="correo" id="correo" placeholder="juan@example.com" required>
+
+    <label for="password"><i class="fas fa-lock"></i> Contraseña:</label>
+    <input type="password" name="password" id="password" placeholder="********" required>
+
+    <button type="submit"><i class="fas fa-sign-in-alt"></i> Entrar</button>
+</form>
+
+<p>¿No tienes cuenta? <a href="{{ url_for('registro') }}">Regístrate aquí</a></p>
+{% endblock %}
+
