@@ -1,10 +1,22 @@
 {% extends 'base.html' %}
-{% block title %}Panel de Usuario{% endblock %}
+{% block title %}Dashboard{% endblock %}
 {% block content %}
-<h2><i class="fas fa-user-circle"></i> Bienvenido, {{ nombre }}</h2>
-<p>Has iniciado sesión correctamente.</p>
-
+<h2>Bienvenido, {{ nombre }}</h2>
 <div class="dashboard-actions">
-    <a href="{{ url_for('logout') }}" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+    <div class="card">
+        <h3><i class="fas fa-boxes"></i> Ver Productos</h3>
+        <p>Consulta y gestiona tu inventario.</p>
+        <a href="{{ url_for('productos') }}" class="btn btn-primary">Ir a productos</a>
+    </div>
+    <div class="card">
+        <h3><i class="fas fa-plus-circle"></i> Crear Producto</h3>
+        <p>Agrega nuevos artículos a tu catálogo.</p>
+        <a href="{{ url_for('crear') }}" class="btn btn-success">Crear nuevo</a>
+    </div>
+    <div class="card">
+        <h3><i class="fas fa-sign-out-alt"></i> Cerrar sesión</h3>
+        <p>Finaliza tu sesión de forma segura.</p>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    </div>
 </div>
 {% endblock %}

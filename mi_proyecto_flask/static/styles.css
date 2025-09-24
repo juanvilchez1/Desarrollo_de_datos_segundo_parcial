@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
 body {
     font-family: 'Poppins', sans-serif;
     background-color: #f0f0f5;
@@ -11,6 +14,7 @@ header, footer {
     color: white;
     text-align: center;
     padding: 1rem;
+    text-shadow: 1px 1px 2px #000;
 }
 
 nav a {
@@ -18,28 +22,49 @@ nav a {
     margin: 0 10px;
     text-decoration: none;
     font-weight: 600;
+    transition: color 0.3s ease;
 }
 
 nav a:hover {
     color: #B19CD9;
+    text-decoration: underline;
 }
 
 main {
     padding: 2rem;
 }
 
+/* Títulos graffiti */
 h1, h2 {
+    font-family: 'Permanent Marker', cursive;
     color: #4B0082;
     text-align: center;
+    margin-bottom: 1rem;
 }
 
+/* Tarjetas interactivas */
+.card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(106, 13, 173, 0.3);
+}
+
+/* Formularios */
 form {
     background-color: white;
     padding: 2rem;
     border-radius: 10px;
-    max-width: 400px;
+    max-width: 500px;
     margin: auto;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
 }
 
 label {
@@ -50,12 +75,19 @@ label {
 
 input[type="text"],
 input[type="email"],
-input[type="password"] {
+input[type="password"],
+input[type="number"] {
     width: 100%;
     padding: 10px;
     margin-top: 5px;
-    border: 1px solid #ccc;
+    border: 2px solid #ccc;
     border-radius: 5px;
+}
+
+input:focus {
+    outline: none;
+    border-color: #6A0DAD;
+    box-shadow: 0 0 5px rgba(106, 13, 173, 0.4);
 }
 
 button {
@@ -67,29 +99,37 @@ button {
     border-radius: 5px;
     cursor: pointer;
     font-weight: 600;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
     background-color: #4B0082;
 }
 
-p {
+/* Tablas */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-family: 'Poppins', sans-serif;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 10px;
     text-align: center;
-    margin-top: 1rem;
 }
 
-input::placeholder {
-    font-family: 'Font Awesome 6 Free', sans-serif;
-    font-weight: 400;
-}
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus {
-    outline: none;
-    border-color: #6A0DAD; 
-    box-shadow: 0 0 5px rgba(106, 13, 173, 0.3); 
+th {
+    background-color: #6A0DAD;
+    color: white;
 }
 
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Alertas */
 .alert {
     background-color: #f8d7da;
     color: #721c24;
@@ -99,11 +139,7 @@ input[type="password"]:focus {
     text-align: center;
 }
 
-.dashboard-actions {
-    text-align: center;
-    margin-top: 20px;
-}
-
+/* Botón logout */
 .btn-logout {
     display: inline-block;
     background-color: #6A0DAD;
@@ -117,5 +153,3 @@ input[type="password"]:focus {
 .btn-logout:hover {
     background-color: #4B0082;
 }
-
-

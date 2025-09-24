@@ -1,17 +1,11 @@
-{% extends "base.html" %}
-
+{% extends 'base.html' %}
 {% block title %}Acerca de{% endblock %}
-
 {% block content %}
-    <h1>Sobre este Proyecto</h1>
-    <p>
-        Esta aplicación Flask fue creada como parte de una tarea práctica. 
-        Utiliza <strong>Jinja2</strong> para manejar plantillas dinámicas, 
-        y cuenta con una estructura que permite reutilizar componentes como 
-        el header y el footer.
-    </p>
-    <p>
-        La finalidad es aprender a estructurar proyectos web con Flask 
-        aplicando buenas prácticas de desarrollo.
-    </p>
+<h2><i class="fas fa-info-circle"></i> Sobre el Proyecto</h2>
+<div class="card">
+    <p>Este sistema fue desarrollado por Juan como parte del módulo de desarrollo web.</p>
+    <p>Incluye autenticación de usuarios, gestión de productos y una interfaz moderna con estilo morado y graffiti.</p>
+    <p>Repositorio disponible en GitHub con documentación y script SQL.</p>
+</div>
 {% endblock %}
+

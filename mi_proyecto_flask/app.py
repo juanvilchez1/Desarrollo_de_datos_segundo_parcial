@@ -25,21 +25,18 @@ def load_user(user_id):
         return Usuario(*resultado)
     return None
 
-# ---------------- RUTAS ---------------- #
+# ---------------- RUTAS USUARIOS ---------------- #
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-# Registro de usuarios
 @app.route('/registro', methods=['GET', 'POST'])
 def registro():
     if request.method == 'POST':
         nombre = request.form['nombre']
         correo = request.form['correo']
         password_plano = request.form['password']
-
-        # Encriptar contraseña
         password_hash = generate_password_hash(password_plano)
 
         try:
@@ -58,7 +55,6 @@ def registro():
             return render_template('registro.html', mensaje="Error: el correo ya está registrado o hubo un problema.")
     return render_template('registro.html')
 
-# Login de usuarios
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -80,23 +76,96 @@ def login():
             return render_template('login.html', mensaje="Correo o contraseña incorrectos.")
     return render_template('login.html')
 
-# Dashboard protegido
 @app.route('/dashboard')
 @login_required
 def dashboard():
     return render_template('dashboard.html', nombre=current_user.nombre)
 
-# Logout
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('login'))
 
-# Página "Acerca de"
 @app.route('/about')
 def about():
     return render_template('about.html')
 
+# ---------------- RUTAS CRUD PRODUCTOS ---------------- #
+
+@app.route('/productos')
+@login_required
+def productos():
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT id_producto, nombre, precio, stock FROM productos")
+    productos = cursor.fetchall()
+    cursor.close()
+    conexion.close()
+    return render_template('productos.html', productos=productos)
+
+@app.route('/crear', methods=['GET', 'POST'])
+@login_required
+def crear():
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        precio = request.form['precio']
+        stock = request.form['stock']
+
+        if not nombre or not precio or not stock:
+            return render_template('crear.html', mensaje="Todos los campos son obligatorios.")
+
+        conexion = obtener_conexion()
+        cursor = conexion.cursor()
+        cursor.execute("""
+            INSERT INTO productos (nombre, precio, stock)
+            VALUES (%s, %s, %s)
+        """, (nombre, precio, stock))
+        conexion.commit()
+        cursor.close()
+        conexion.close()
+        return redirect(url_for('productos'))
+    return render_template('crear.html')
+
+@app.route('/editar/<int:id>', methods=['GET', 'POST'])
+@login_required
+def editar(id):
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        precio = request.form['precio']
+        stock = request.form['stock']
+        cursor.execute("""
+            UPDATE productos
+            SET nombre = %s, precio = %s, stock = %s
+            WHERE id_producto = %s
+        """, (nombre, precio, stock, id))
+        conexion.commit()
+        cursor.close()
+        conexion.close()
+        return redirect(url_for('productos'))
+
+    cursor.execute("SELECT nombre, precio, stock FROM productos WHERE id_producto = %s", (id,))
+    producto = cursor.fetchone()
+    cursor.close()
+    conexion.close()
+    return render_template('editar.html', producto=producto, id=id)
+
+@app.route('/eliminar/<int:id>', methods=['GET', 'POST'])
+@login_required
+def eliminar(id):
+    if request.method == 'POST':
+        conexion = obtener_conexion()
+        cursor = conexion.cursor()
+        cursor.execute("DELETE FROM productos WHERE id_producto = %s", (id,))
+        conexion.commit()
+        cursor.close()
+        conexion.close()
+        return redirect(url_for('productos'))
+    return render_template('eliminar.html', id=id)
+
 if __name__ == '__main__':
     app.run(debug=True)
+    
